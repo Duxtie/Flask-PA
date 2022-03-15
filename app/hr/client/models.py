@@ -1,12 +1,13 @@
 # import datetime as date
 from datetime import datetime
-
+import uuid
 from flask_appbuilder import Model
 from sqlalchemy import (BigInteger, Boolean, Column, Date, DateTime, ForeignKey, Index, Integer, Numeric, SmallInteger,
                         String, Table, Text, text)
 from sqlalchemy.dialects.postgresql.base import INET, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_utils.types.uuid import UUIDType
 
 from etas.app.models import BaseModel as Model
 
@@ -42,7 +43,7 @@ class Client(Model):
     __tablename__ = 'clients'
 
     id = Column(BigInteger, primary_key=True)
-    uuid = Column(UUID)
+    uuid = Column(UUIDType(binary=False), default=uuid.uuid4, primary_key=True)
     name = Column(String(191), unique=True, nullable=False)
     short_name = Column(String(255))
 
