@@ -1,0 +1,96 @@
+{% set endpoint = 'PayrollCompareModalView' + '.store' %}
+{% set path = endpoint | safe_url_for(pk=pk) %}
+{% if path %}
+
+    <div class="pa-15">
+        <form class="row" action="{{ path }}" method="post">
+            <div class="form-group col-md-12">
+                <label class="control-label mb-10">Client Group</label>
+                <select name="client_group" class="form-control my_select2" data-action="select22">
+                    {% for client_group in client_groups %}
+                        <option value="{{ client_group.id }}">{{ client_group.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label mb-10">Month One</label>
+                <input type="month" name="month_1" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+                <label class="control-label mb-10">Month Two</label>
+                <input type="month" name="month_2" class="form-control">
+            </div>
+
+            <div class="col-md-12">
+                <h6 class="mb-10 mt-20">Select columns to compare</h6>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <select id="columns" name="columns[]" multiple>
+                            <optgroup label="Profile Information">
+                                {% for tbl_column_value in profile_columns %}
+                                    <option value="{{ tbl_column_value }}">{{ tbl_column_value }}</option>
+                                {% endfor %}
+                            </optgroup>
+                            <optgroup label="Payroll Information">
+                                {% for tbl_column_value in payroll_columns %}
+                                    <option value="{{ tbl_column_value }}">{{ tbl_column_value }}</option>
+                                {% endfor %}
+                            </optgroup>
+                            {% for tbl_column_value in tbl_columns %}
+                                <option value="{{ tbl_column_value }}">{{ tbl_column_value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="button-box">
+                            <a id="select-all" class="btn btn-sm btn-block btn-default btn-outline mr-10 mt-15" href="#">select
+                                all
+                            </a>
+                            <a id="deselect-all" class="btn btn-sm btn-block btn-default btn-outline mr-10 mt-15" href="#">deselect
+                                all
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 position-relative">
+                <div class="form-group mt-50 pt-30 text-center">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-exchange"></i> Compare
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endif %}
+<link href="{{url_for('static',filename='philbert/vendors/bower_components/multiselect/css/multi-select.css')}}"
+      rel="stylesheet">
+<style>
+    .ms-container {
+        width: 100%;
+    }
+    .ms-container .ms-list {
+        height: 400px;
+    }
+</style>
+<script src="{{ url_for('static',filename='philbert/vendors/bower_components/multiselect/js/jquery.multi-select.js')}}"></script>
+<script>
+    /* Multiselect Init*/
+    $('#columns').multiSelect({
+        selectableOptgroup: true,
+        minHeight:40
+    });
+    $('#select-all').click(function () {
+        $('#columns').multiSelect('select_all');
+        return false;
+    });
+    $('#deselect-all').click(function () {
+        $('#columns').multiSelect('deselect_all');
+        return false;
+    });
+
+</script>

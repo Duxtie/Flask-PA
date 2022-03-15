@@ -1,0 +1,80 @@
+<!-- extend base layout -->
+{% extends "philbert/base.html" %}
+
+
+
+{% block content %}
+
+	<!-- Row -->
+	<div class="table-struct full-width full-height">
+		<div class="table-cell vertical-align-middle auth-form-wrap">
+			<div class="auth-form  ml-auto mr-auto no-float">
+				<div class="row">
+					<div class="col-sm-12 col-xs-12">
+						<div class="mb-30">
+							<h3 class="text-center txt-dark mb-10">
+	<!--                                                {{ title }} to -->
+								{{ app_name }}
+							</h3>
+							<h6 class="text-center nonecase-font txt-grey">{{ _('Enter your details below') }}</h6>
+						</div>
+						<div class="form-wrap">
+							<form action="" method="post" name="login">
+								{{form.hidden_tag()}}
+
+								<div class="form-group">
+									<label class="control-label mb-10" for="openid">{{_('Email address')}}</label>
+									{{ form.username(size = 80, class = "form-control", placeholder="Enter username", autofocus = true) }}
+								</div>
+								{% for error in form.errors.get('openid', []) %}
+									<span class="help-inline">[{{error}}]</span><br>
+								{% endfor %}
+
+								<div class="form-group">
+									<label class="pull-left control-label mb-10" for="openid">Password</label>
+									<a class="capitalize-font txt-primary block mb-10 pull-right font-12" href="forgot-password.html">{{_('forgot
+										password ?')}}</a>
+									<div class="clearfix"></div>
+									{{ form.password(size = 80, class = "form-control", placeholder="Enter Password") }}
+								</div>
+								{% for error in form.errors.get('openid', []) %}
+									<span class="help-inline">[{{error}}]</span><br>
+								{% endfor %}
+
+								<div class="form-group">
+									<div class="checkbox checkbox-primary pr-10 pull-left">
+										<input id="checkbox_2" type="checkbox">
+										<label for="checkbox_2"> Keep me logged in</label>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div class="form-group text-center">
+									<button type="submit" class="btn btn-info btn-success btn-rounded">{{_('Sign In')}}</button>
+								</div>
+
+
+								<div class="control-group">
+									<div class="controls">
+										<br>
+										<div>
+											{% if appbuilder.sm.auth_user_registration %}
+												<p class="capitalize-font block mb-10 text-center font-13">
+													Don't have an account?
+													<a href="{{ appbuilder.sm.get_url_for_registeruser }}" class="txt-primary" data-toggle="tooltip" rel="tooltip" title="{{_('If you are not already a user, please register')}}">
+													{{_('Register')}}
+												</a></p>
+											{% endif %}
+										</div>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /Row -->
+
+{% endblock %}

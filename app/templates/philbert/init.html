@@ -1,0 +1,140 @@
+{% import 'philbert/baselib.html' as baselib with context %}
+
+
+{% if appbuilder %}
+    {% set app_name = appbuilder.app_name %}
+{% endif %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block page_title %}{{app_name}}{% endblock %}</title>
+
+    {% block head_meta %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+    {% endblock %}
+    {% block head_css %}
+        {#<link href="{{url_for('appbuilder.static',filename='css/bootstrap.min.css')}}" rel="stylesheet">#}
+        <link href="{{url_for('appbuilder.static',filename='css/font-awesome.min.css')}}" rel="stylesheet">
+        {% if appbuilder.app_theme %}
+        {#<link href="{{url_for('appbuilder.static',filename='css/themes/'+ appbuilder.app_theme )}}"  rel="stylesheet">#}
+        {% endif %}
+
+         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+         <!--[if lt IE 9]>
+            <script src="{{url_for('appbuilder.static',filename='js/html5shiv.js')}}"></script>
+            <script src="{{url_for('appbuilder.static',filename='js/respond.min.js')}}"></script>
+         <![endif]-->
+
+        <link href="{{url_for('appbuilder.static',filename='datepicker/bootstrap-datepicker.css')}}" rel="stylesheet">
+        {#<link href="{{url_for('appbuilder.static',filename='select2/select2.css')}}" rel="stylesheet">#}
+        <link href="{{url_for('static',filename='philbert/vendors/bower_components/select2/dist/css/select2.min.css')}}" rel="stylesheet">
+        <link href="{{url_for('static',filename='philbert/vendors/bower_components/dropify/dist/css/dropify.min.css')}}" rel="stylesheet">
+        <link href="{{url_for('appbuilder.static',filename='css/flags/flags16.css')}}" rel="stylesheet">
+
+        <link href="{{url_for('static',filename='philbert/vendors/bower_components/datatables/media/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+
+        <link href="{{url_for('static',filename='philbert/dist/css/style.css')}}" rel="stylesheet">
+
+        <link href="{{url_for('appbuilder.static',filename='css/ab.css')}}" rel="stylesheet">
+        {#<link href="{{url_for('static',filename='philbert/dist/css/style.css')}}" rel="stylesheet">#}
+    {% endblock %}
+    {% block head_js %}
+        <script src="{{url_for('appbuilder.static',filename='js/jquery-latest.js')}}"></script>
+        {#<script src="{{ url_for('static',filename='philbert/vendors/bower_components/jquery/dist/jquery.min.js') }}"></script>#}
+        
+        <!-- Data table JavaScript -->
+        <script src="{{ url_for('static',filename='philbert/vendors/bower_components/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+
+        <script src="{{ url_for('static',filename='philbert/vendors/bower_components/dropify/dist/js/dropify.min.js') }}"></script>
+        <script src="{{url_for('static',filename='philbert/dist/js/ab/ab_filters.js')}}"></script>
+        <script src="{{url_for('static',filename='philbert/dist/js/ab/ab_actions.js')}}"></script>
+        <style>
+            .select2-selection.select2-selection--multiple {
+                height: unset;
+            }
+        </style>
+    {% endblock %}
+
+</head>
+
+<body >
+
+{% block body %}
+{% endblock %}
+
+
+{% block tail_js %}
+    {#<script src="{{url_for('appbuilder.static',filename='js/bootstrap.min.js')}}"></script>#}
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ url_for('static',filename='philbert/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+	<!-- Data table JavaScript -->
+    <script src="{{ url_for('static',filename='philbert/vendors/bower_components/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+
+	<!-- Slimscroll JavaScript -->
+    <script src="{{ url_for('static',filename='philbert/dist/js/jquery.slimscroll.js')}}"></script>
+
+	<!-- simpleWeather JavaScript -->
+    <script src="{{ url_for('static',filename='philbert/vendors/bower_components/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='philbert/vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='philbert/dist/js/simpleweather-data.js')}}"></script>
+
+	<!-- Progressbar Animation JavaScript -->
+    <script src="{{ url_for('static',filename='philbert/vendors/bower_components/waypoints/lib/jquery.waypoints.min.js')}}"></script>
+    <script src="{{ url_for('static',filename='philbert/dist/js/init.js')}}"></script>
+
+    <script src="{{url_for('appbuilder.static',filename='datepicker/bootstrap-datepicker.js')}}"></script>
+    {#<script src="{{url_for('appbuilder.static',filename='select2/select2.js')}}"></script>#}
+    <script src="{{ url_for('static',filename='philbert/vendors/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{url_for('static',filename='philbert/dist/js/ab/ab.js')}}"></script>
+
+    <script>
+            if (jQuery().dropify) {
+                $('[data-toggle="dropify"]').each(function() {
+                    let selector = this;
+                    let options = $(selector).data();
+                    options = options.options ? options.options : options;
+                    $(selector).dropify($.extend(options, {}));
+                });
+            }
+    </script>
+    <script>
+            if (jQuery().dropify) {
+                $('[type="file"]').each(function() {
+                    let selector = this,
+                        $selector = $(selector),
+                        options = $(selector).data();
+                    options = options.options ? options.options : options;
+
+                    let $input_group = $selector.parent('.input-group')
+                    $input_group.find('.input-group-addon').remove()
+                    $input_group.removeClass()
+
+                    $(selector).dropify($.extend(options, {}));
+                });
+            }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            let $data_tables = $('[data-toggle="datatable"]');
+            if ($data_tables.length && $.fn.DataTable) {
+                console.log('Found')
+                $data_tables.DataTable();
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block add_tail_js %}
+{% endblock %}
+
+{% block tail %}
+{% endblock %}
+
+  </body>
+</html>

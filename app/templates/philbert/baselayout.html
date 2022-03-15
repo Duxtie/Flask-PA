@@ -1,0 +1,67 @@
+{% extends 'philbert/init.html' %}
+{% import 'philbert/baselib.html' as baselib %}
+
+{% block body %}
+    <div class="preloader-it">
+		<div class="la-anim-1"></div>
+	</div>
+    <div class="wrapper {% if not current_user.is_anonymous %} theme-1-active pimary-color-green {% else %}pa-0 {% endif %}">
+
+
+        {% if not current_user.is_anonymous %}
+            {% block navbar %}
+                {% include 'philbert/layouts/partials/_header.html' %}
+                <!-- <header class="top" role="header"> {% include 'philbert/navbar.html' %} </header> -->
+            {% endblock %}
+
+            {% include 'philbert/layouts/partials/_sidebar_left.html' %}
+        {% else %}
+            <header class="sp-header">
+				<div class="sp-logo-wrap pull-left">
+					<a href="/">
+                        {% if appbuilder.app_icon %}
+						    <img class="brand-img mr-10" src="{{appbuilder.app_icon}}" alt="{{ appbuilder.app_name }}" style="height: 42px;"/>
+                        {% else %}
+                            {{ appbuilder.app_name }}
+                        {% endif %}
+						<span class="brand-text"></span>
+					</a>
+				</div>
+
+                {% if appbuilder.sm.auth_user_registration %}
+                    <div class="form-group mb-0 pull-right">
+                        <span class="inline-block pr-10">   Don't have an account?</span>
+                        <a class="inline-block btn btn-info btn-success btn-rounded btn-outline" href="{{ appbuilder.sm.get_url_for_registeruser }}">Sign Up</a>
+                    </div>
+                {% endif %}
+				<div class="clearfix"></div>
+			</header>
+        {% endif %}
+
+        <div class="page-wrapper {% if current_user.is_anonymous %} pa-0 ma-0 auth-page {% endif %}">
+            <div class="container-fluid pt-25">
+              <!--<div class="row">-->
+                  {% block messages %}
+                    {% include 'philbert/flash.html' %}
+                  {% endblock %}
+                    {% block content %}
+                  {% endblock %}
+              <!--</div>-->
+            </div>
+        </div>
+
+        {% block footer %}
+            <footer>
+            <div class="img-rounded nav-fixed-bottom">
+                <div class="container">
+                    {% include 'philbert/footer.html' %}
+                </div>
+            </div>
+            </footer>
+        {% endblock %}
+        {% include 'philbert/general/confirm.html' %}
+        {% include 'philbert/general/alert.html' %}
+        {% include 'philbert/layouts/partials/_modals.html' %}
+        </div>
+{% endblock %}
+

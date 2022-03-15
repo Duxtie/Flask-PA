@@ -1,0 +1,17 @@
+
+
+{% macro lnk_dynamic(item) %}
+        <a class="btn btn-sm btn-default btn-outline"
+                {% for index, attr in item.attrs %}
+                    {{ index }}="{{ attr }}"
+                {% endfor %}
+        >
+            <i class="fa fa-exchange"></i>
+            {{ item['label'] }}
+        </a>
+{% endmacro %}
+
+{% for index, button in extra_args['buttons'] %}
+    {{ index }}
+    {{ lnk_dynamic(button) }}
+{% endfor %}

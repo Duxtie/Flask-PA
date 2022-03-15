@@ -1,0 +1,11 @@
+{% extends "philbert/base.html" %}
+{% import 'philbert/general/lib.html' as lib %}
+
+{% block content %}
+{{ lib.page_title(title) }}
+
+{% block add_form %}
+    {{ widgets.get('add')(form_action=form_action)|safe }}
+{% endblock %}
+
+{% endblock %}

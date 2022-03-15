@@ -1,0 +1,82 @@
+{% import 'philbert/general/lib.html' as lib %}
+
+
+
+{% macro render_list_header(can_add, page, page_size, count, filters, actions, modelview_name) %}
+    {{ lib.render_set_page_size(page, page_size, count, modelview_name) }}
+    {{ lib.render_actions(actions, modelview_name) }}
+    <div class="pull-right">
+
+        {{ lib.lnk_back() }}
+
+        {% set compare_payroll_endpoint = 'PayrollCompareModalView' + '.create' %}
+        {% set compare_payroll_path = compare_payroll_endpoint | safe_url_for(pk=pk) %}
+        {% if compare_payroll_path %}
+            {% set compare_payroll_path = compare_payroll_path | set_link_filters(filters) %}
+            {% set compare_payroll_link = lib.lnk_custom_ajax_modal('Compare Payroll', compare_payroll_path, 'compare_payroll', 'fa fa-exchange', 'modal-lg') %}
+        {% endif %}
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-default btn-outline dropdown-toggle" data-toggle="dropdown">
+                Operations <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>{{ compare_payroll_link }}</li>
+            </ul>
+        </div>
+
+        {{ lib.render_bulk_actions(bulk_actions, modelview_name) }}
+        {% if can_add %}
+            {% set endpoint = modelview_name + '.add' %}
+            {% set path = endpoint | safe_url_for %}
+            {% if path %}
+                {% set path = path | set_link_filters(filters) %}
+                {{ lib.lnk_add(path) }}
+            {% endif %}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% set can_add = "can_add" | is_item_visible(modelview_name) %}
+{% set can_show = "can_show" | is_item_visible(modelview_name) %}
+{% set can_edit = "can_edit" | is_item_visible(modelview_name) %}
+{% set can_delete = "can_delete" | is_item_visible(modelview_name) %}
+{% set actions = actions | get_actions_on_list(modelview_name) %}
+
+<div class="panel panel-body">
+    {% block list_header scoped %}
+        {{ render_list_header(can_add, page, page_size, count, filters, actions, modelview_name) }}
+    {% endblock %}
+</div>
+
+{% if count > 0 %}
+
+    {% block begin_content scoped %}
+    {% endblock %}
+
+    {% block begin_loop_header scoped %}
+    {% endblock %}
+
+    {% block begin_loop_values %}
+    {% endblock %}
+
+    {% block end_content scoped %}
+    {% endblock %}
+
+<div class="">
+    {% block list_footer scoped %}
+        {{ lib.render_list_footer(page, page_size, count, modelview_name) }}
+    {% endblock %}
+</div>
+
+    {{ lib.action_form(actions, modelview_name) }}
+
+    <script language="javascript">
+        $(document).ready(function() {
+            window.modelActions = new AdminActions();
+        });
+    </script>
+
+{% else %}
+    <b>{{_("No records found")}}</b>
+{% endif %}
