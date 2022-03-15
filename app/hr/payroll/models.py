@@ -24,7 +24,7 @@ class PayrollFileType(Model):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(191), unique=True, nullable=False)
-    description = Column(Text(2000))
+    description = Column(Text)
 
     def __repr__(self):
         return self.name
@@ -47,7 +47,7 @@ class PayrollFile(Model):
     type = relationship(PayrollFileType)
 
     file = Column(FileColumn, nullable=False)
-    description = Column(Text(2000))
+    description = Column(Text)
 
     def __repr__(self):
         return self.name

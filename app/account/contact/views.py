@@ -13,7 +13,6 @@ from etas.app.views import BaseModelView as ModelView
 from .models import Contact, ContactStatus
 from .widgets import ContactEditBlockWidget
 from ... import appbuilder, db
-from ...medical_history.allergy.models import Allergy
 
 log = logging.getLogger(__name__)
 
@@ -48,11 +47,8 @@ def contact_add_fieldset():
                     "first_name",
                     "last_name",
                     "middle_name",
-                    "preferred_name",
                     "title",
-                    "date_of_birth",
                     "gender",
-                    "photo",
                 ]
             }
         ),
@@ -60,68 +56,12 @@ def contact_add_fieldset():
             "Personal Info",
             {
                 "fields": [
-                    "birth_sex",
-                    "race",
-                    "ethnicity",
-                    "eye_color",
-                    "sexual_orientation",
-                    "marital_status",
-                    "occupation",
+                    "designation",
                 ],
                 "expanded": False,
             },
         ),
-        (
-            "Contatct Info",
-            {
-                "fields": [
-                    "mobile_phone",
-                    "email",
-                    "country",
-                    "zip_code",
 
-                    "permanent_address",
-                    "state_of_origin",
-                    "lga_of_origin",
-
-                    "residential_address",
-                    "state_of_residence",
-                    "lga_of_residence",
-                ],
-                "expanded": True,
-            },
-        ),
-        (
-            "Identity Info",
-            {
-                "fields": [
-                    "birth_id",
-                    "nin",
-                    "bvn",
-                    "ndln",
-                    "ippn",
-                ],
-                "expanded": False,
-            },
-        ),
-        (
-            "Other Info",
-            {
-                "fields": [
-                    "facility",
-                    "vfc",
-                    "mother_maiden_name",
-                    "guardian",
-                    "guardian_relationship_id",
-                    "emergency_contact",
-                    "emergency_phone",
-                    "contact_status_id",
-                    "date_of_death",
-                    "cause_of_death",
-                ],
-                "expanded": False,
-            },
-        ),
     ]
 
 
@@ -134,25 +74,9 @@ def contact_show_fieldset():
                     "first_name",
                     "last_name",
                     "middle_name",
-                    "preferred_name",
-                    "date_of_birth",
-                    "birth_id",
                     "gender",
-                    "contact_group"
                 ]
             }
-        ),
-        (
-            "Personal Info",
-            {
-                "fields": [
-                    "address",
-                    "birthday",
-                    "personal_phone",
-                    "personal_celphone",
-                ],
-                "expanded": False,
-            },
         ),
     ]
 
@@ -163,14 +87,7 @@ class ContactModelView(ModelView):
 
     edit_widget = ContactEditBlockWidget
 
-    label_columns = {
-        'bvn': 'Bank Verification Number',
-        'nin': 'National Identity Number',
-        'ndln': 'National Drivers License Number',
-        'ippn': 'International Passport Number',
-    }
-
-    list_columns = ["full_name", "gender.name", "date_of_birth", "mobile_phone", "contact_status.name"]
+    list_columns = ["full_name", "gender.name", "contact_status.name"]
 
     base_order = ("created_at", "asc")
     add_fieldsets = contact_add_fieldset()
@@ -201,7 +118,6 @@ class ContactModelView(ModelView):
     def show(self, pk):
         pk = self._deserialize_pk_if_composite(pk)
         widgets = self._show(pk)
-        allergies = db.session.query(Allergy)
 
         return self.render_template(
             self.show_template,

@@ -3,11 +3,17 @@ import uuid
 
 from flask_appbuilder import Model
 from flask_appbuilder.models.mixins import FileColumn
-from sqlalchemy import (BigInteger, Boolean, Column, Date, DateTime, ForeignKey, Index, Integer, Numeric, SmallInteger, String, Table, Text, text)
+from sqlalchemy import (BigInteger, Boolean, Column, Date, DateTime, ForeignKey, Index, Integer, Numeric, SmallInteger,
+                        String, Table, Text, text)
 from sqlalchemy.dialects.postgresql.base import INET, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
+from sqlalchemy_utils.types.uuid import UUIDType
+
+from ...biodata.gender.models import Gender
+from ...biodata.title.models import Title
+from ...hr.designation.models import Designation
 
 from etas.app.models import BaseModel
 
@@ -16,6 +22,7 @@ from etas.app.models import BaseModel
 # from etas.app.platform.acl.models import ACLUser as User
 
 mindate = datetime.date(datetime.MINYEAR, 1, 1)
+
 
 class ContactStatus(Model):
     __tablename__ = 'contact_status'
@@ -32,28 +39,24 @@ class ContactStatus(Model):
 class Contact(BaseModel):
     __tablename__ = 'contacts'
 
-    Column('id', UUID, nullable=False),
-    Column('reference_id', String(255), nullable=False, unique=True),
+    id = Column(UUIDType(binary=False), default=uuid.uuid4, primary_key=True)
 
     contact_status_id = Column(ForeignKey('contact_status.id'), default=1000)
     contact_status = relationship(ContactStatus)
 
-    Column('company_name', String(255)),
-    Column('cac_reg_no', String(255)),
-    Column('client_type_id', Integer, nullable=False, server_default=text("0")),
-    Column('tax_id', String(255)),
-    Column('tax_state_id', Integer, server_default=text("0")),
-    Column('address', Text),
-    Column('street', Text),
-    Column('state_id', Integer, nullable=False, server_default=text("0")),
-    Column('state_lga_id', Integer, nullable=False, server_default=text("0")),
-    Column('contact_name', String(255)),
-    Column('contact_phone', String(255)),
-    Column('contact_email', String(255)),
-    Column('website', String(255)),
-    Column('bank_id', Integer, nullable=False, server_default=text("0")),
-    Column('bank_account', String(255)),
-    Column('code', String(255), unique=True),
+    first_name = Column(String(50))
+    last_name = Column(String(50))
+    middle_name = Column(String(50))
+    date_of_birth = Column(Date)
+
+    gender_id = Column(ForeignKey('genders.id'), default=9)
+    gender = relationship(Gender, foreign_keys=[gender_id])
+
+    designation_id = Column(ForeignKey('designations.id'), default=1000)
+    designation = relationship(Designation)
+
+    title_id = Column(ForeignKey('titles.id'), default=1000)
+    title = relationship(Title)
 
     def __repr__(self):
         return self.full_name()
